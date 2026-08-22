@@ -1,0 +1,25 @@
+title: Repeated Sudo Authentication Failures (Possible Brute Force)
+id: a58665d3-c730-4837-9483-3e4d3d7f301f
+status: test
+description: |
+    Detects three or more consecutive failed sudo authentication attempts
+    within a single session, a common indicator of local privilege
+    escalation brute-forcing. Tested end-to-end on macOS via Wazuh
+    (rule 5404 -> custom rule 100100) with a confirmed real trigger.
+references:
+    - https://attack.mitre.org/techniques/T1110/
+author: Emilio Rodriguez
+date: 2026-08-08
+tags:
+    - attack.credential-access
+    - attack.t1110
+logsource:
+    product: macos
+    category: authentication
+detection:
+    selection:
+        message|contains: 'incorrect password attempt'
+    condition: selection
+falsepositives:
+    - Legitimate user repeatedly mistyping their own password
+level: high

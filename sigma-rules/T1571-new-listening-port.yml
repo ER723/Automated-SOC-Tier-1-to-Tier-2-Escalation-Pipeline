@@ -1,0 +1,30 @@
+title: New or Changed Listening Network Port (Possible Unauthorized Service)
+id: 4be39103-e974-4ba5-9e48-3969c803eeb7
+status: test
+description: |
+    Detects a change in the host's listening ports (netstat delta),
+    which can indicate an unauthorized service, backdoor, or C2
+    listener being started. NOTE: like the rootcheck rule, this is a
+    meta-detection on Wazuh's own polling-based port-diff module
+    (rule 533 -> custom rule 100102), not a native network log source.
+    Tested end-to-end with a real trigger (python3 -m http.server) and
+    confirmed to fire on both port-open and port-close events.
+references:
+    - https://attack.mitre.org/techniques/T1571/
+author: Emilio Rodriguez
+date: 2026-08-08
+tags:
+    - attack.command-and-control
+    - attack.t1571
+logsource:
+    product: wazuh
+    service: netstat
+detection:
+    selection:
+        rule.id: 533
+    condition: selection
+falsepositives:
+    - Normal application behavior (browsers, dev servers, updates) opening
+      or closing local ports; high-volume source in practice, expect to
+      pair with an allowlist for known-benign services
+level: medium
