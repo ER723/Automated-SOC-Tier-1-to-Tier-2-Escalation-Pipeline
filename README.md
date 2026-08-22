@@ -4,8 +4,6 @@ A fully automated, $0-cost, lightweight security operations pipeline that replac
 
 **Live interactive architecture diagram:** [er723.github.io/Automated-SOC-Tier-1-to-Tier-2-Escalation-Pipeline](https://er723.github.io/Automated-SOC-Tier-1-to-Tier-2-Escalation-Pipeline/)
 
-**Note:** this is the private implementation-source repository. Public architecture write-up, test evidence, and documentation: see the [companion public repo](https://github.com/ER723/Automated-SOC-Tier-1-to-Tier-2-Escalation-Pipeline).
-
 ## Architecture
 
 ```mermaid
