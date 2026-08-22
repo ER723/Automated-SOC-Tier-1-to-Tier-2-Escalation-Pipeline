@@ -43,12 +43,6 @@ Three real, MITRE ATT&CK-mapped techniques were tested against the live pipeline
 **What this pipeline can and can't detect:** [`docs/technique-coverage.md`](docs/technique-coverage.md)
 **Operational drawbacks and limitations:** [`docs/known-limitations.md`](docs/known-limitations.md)
 
-## Detection engineering — Sigma rules
-
-Three of this pipeline's custom Wazuh rules are also expressed as vendor-agnostic Sigma rules, verified with `sigma-cli` including a working conversion to Splunk syntax. See [`sigma-rules/`](sigma-rules/) and [`docs/sigma-mapping.md`](docs/sigma-mapping.md).
-
-![Where Sigma rules sit in the pipeline](docs/sigma-placement-diagram.jpg)
-
 ## What this does
 
 1. **Wazuh Agent** collects host telemetry (file integrity, log collection, rootcheck, SCA benchmarks)
