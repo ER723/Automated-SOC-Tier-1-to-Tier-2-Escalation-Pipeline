@@ -4,7 +4,7 @@ A fully automated, $0-cost, lightweight security operations pipeline that replac
 
 **Live interactive architecture diagram:** [er723.github.io/Automated-SOC-Tier-1-to-Tier-2-Escalation-Pipeline](https://er723.github.io/Automated-SOC-Tier-1-to-Tier-2-Escalation-Pipeline/)
 
-**Note on this repo:** this public repository contains the architecture write-up, test methodology, evidence, and honest limitations documentation. The implementation source (scripts, configs, deployment automation) lives in a private companion repository — reach out if you'd like access for review.
+**Note:** this is the private implementation-source repository. Public architecture write-up, test evidence, and documentation: see the [companion public repo](https://github.com/ER723/Automated-SOC-Tier-1-to-Tier-2-Escalation-Pipeline).
 
 ## Architecture
 
@@ -43,6 +43,10 @@ Three real, MITRE ATT&CK-mapped techniques were tested against the live pipeline
 **What this pipeline can and can't detect:** [`docs/technique-coverage.md`](docs/technique-coverage.md)
 **Operational drawbacks and limitations:** [`docs/known-limitations.md`](docs/known-limitations.md)
 
+## Detection engineering — Sigma rules
+
+Three of this pipeline's custom Wazuh rules are also expressed as vendor-agnostic Sigma rules, verified with `sigma-cli` including a working conversion to Splunk syntax. See [`sigma-rules/`](sigma-rules/) and [`docs/sigma-mapping.md`](docs/sigma-mapping.md).
+
 ## What this does
 
 1. **Wazuh Agent** collects host telemetry (file integrity, log collection, rootcheck, SCA benchmarks)
@@ -68,3 +72,38 @@ Three real, MITRE ATT&CK-mapped techniques were tested against the live pipeline
 - Agent enrollment requires a pre-shared password
 - Google Sheet restricted to named accounts, no link-sharing
 - Discord webhook rotated after incidental exposure during development
+
+## Setup
+
+1. Copy `config/docker-compose.example.yml` to `docker-compose.yml`, adjust paths
+2. Copy `config/watcher_config.example.json` to `watcher_config.json`
+3. Copy `.env.example` to `.env`, fill in real secrets (never commit this file)
+4. Generate an HMAC secret: `openssl rand -hex 32` — set it in both `.env` and the Apps Script's Script Properties
+5. Deploy `appsscript/Code.gs` to a Google Sheet (Extensions -> Apps Script -> Deploy as Web App)
+6. `docker compose up -d`
+7. Install the Wazuh agent on your Mac, pointed at `127.0.0.1`
+8. Run `scripts/watcher.py` under launchd (see `launchd/*.plist.example`)
+
+## Repo structure
+
+```
+├── config/
+│   ├── docker-compose.example.yml
+│   ├── watcher_config.example.json
+│   ├── local_rules.example.xml       (reference pattern, not a default recommendation)
+│   └── 99-disable-indexer.example
+├── scripts/
+│   ├── watcher.py
+│   ├── cve_briefing.py
+│   └── rule_tuning.py
+├── appsscript/
+│   └── Code.gs
+├── launchd/
+│   └── *.plist.example
+├── .env.example
+└── docs/
+    ├── architecture.html
+    ├── portfolio-test-results.md
+    ├── technique-coverage.md
+    └── known-limitations.md
+```
